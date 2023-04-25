@@ -1,0 +1,48 @@
+# Colours
+49, 52, 59
+200, 210, 230
+34, 40, 44
+100, 110, 230
+
+# Borders
+Line, @Colour1, 2
+
+#Fonts
+// (Font name, Font type, Size)
+Calibri, PLAIN, 11
+Calibri, BOLD, 16
+
+# Defaults
+// These values are used in places that are left blank
+Primary Colour= 255, 0, 0
+Secondary Colour= 0, 255, 0
+Accent Colour= 0, 0, 255
+Default Font= Calibri, PLAIN, 11
+
+# Panel 1
+Background Colour=
+
+# Panel 2
+Background Colour=
+
+# Panel 3
+Background Colour=
+
+# Button 1
+Foreground Colour=
+Background Colour=
+Border =@0
+Font=@0
+
+# Label 1
+Foreground Colour=
+
+# Text Box 1
+Foreground Colour=
+Background Colour=
+Border=
+
+# Text Area 1
+Foreground Colour=
+Background Colour=
+Border=
