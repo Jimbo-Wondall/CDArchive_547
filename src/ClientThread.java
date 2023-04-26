@@ -16,6 +16,9 @@ public class ClientThread extends Thread
         start();
     }
 
+    /**
+     * POST: run
+     */
     public void open()
     {
         try

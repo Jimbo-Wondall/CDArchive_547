@@ -1,3 +1,4 @@
+import Models.CDModel;
 import Utils.*;
 
 import javax.swing.*;
@@ -5,6 +6,7 @@ import javax.swing.table.TableRowSorter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -16,7 +18,7 @@ public class MainFormData {
     MainForm parent;
     Path currentFilePath;
     File currentFile;
-    String[] fileLines;
+    CDModel[] fileData;
     TableDriver tableDriver;
     TableRowSorter<TableDriver> tableSorter;
     int selectedIndex = -1;
@@ -32,27 +34,52 @@ public class MainFormData {
         linkedMessageList = new DList();
 
         connection = new Network(this);
+
+
     }
 
     public void displayBlankEntry() {
         displayEntry(-1);
     }
     public void displayEntry(int index) {
-        Object[] currentData;
+        //Object[] currentData;
+        String[] currentData;
+        CDModel obj = null;
         if (index < 0){
-            currentData = new Object[9];
+            currentData = new String[9];
             Arrays.fill(currentData, "");
         } else {
-            currentData = tableDriver.tableData.get(index);
+            //currentData = tableDriver.tableData.get(index).toStringArray();
+            obj = (CDModel) tableDriver.tableData.get(index);
         }
-        parent.txtID.setText((currentData[0]).toString());
-        parent.txtTitle.setText((currentData[1]).toString());
-        parent.txtAuthor.setText((currentData[2]).toString());
-        parent.txtSection.setText((currentData[3]).toString());
-        parent.txtXPos.setText((currentData[4]).toString());
-        parent.txtYPos.setText((currentData[5]).toString());
-        parent.txtBarCode.setText((currentData[6]).toString());
-        parent.txtDescription.setText((currentData[7]).toString());
+        if (obj == null) {
+            parent.txtID.setText("");
+            parent.txtTitle.setText("");
+            parent.txtAuthor.setText("");
+            parent.txtSection.setText("");
+            parent.txtXPos.setText("");
+            parent.txtYPos.setText("");
+            parent.txtBarCode.setText("");
+            parent.txtDescription.setText("");
+        } else {
+            parent.txtID.setText(obj.getByIndex(0).toString());
+            parent.txtTitle.setText((obj.getByIndex(1)).toString());
+            parent.txtAuthor.setText((obj.getByIndex(2)).toString());
+            parent.txtSection.setText((obj.getByIndex(3)).toString());
+            parent.txtXPos.setText((obj.getByIndex(4)).toString());
+            parent.txtYPos.setText((obj.getByIndex(5)).toString());
+            parent.txtBarCode.setText((obj.getByIndex(6)).toString());
+            parent.txtDescription.setText((obj.getByIndex(7)).toString());
+        }
+
+        //parent.txtID.setText((currentData[0]));
+        //parent.txtTitle.setText((currentData[1]));
+        //parent.txtAuthor.setText((currentData[2]));
+        //parent.txtSection.setText((currentData[3]));
+        //parent.txtXPos.setText((currentData[4]));
+        //parent.txtYPos.setText((currentData[5]));
+        //parent.txtBarCode.setText((currentData[6]));
+        //parent.txtDescription.setText((currentData[7]));
     }
 
     public void filterTable(String input) {
@@ -68,9 +95,11 @@ public class MainFormData {
             LinkedList<String> temp = new LinkedList<String>();
             String st;
             while ((st = br.readLine()) != null){
-                temp.add(st);
+                if (tryParseInt(st.split(";")[0])) {
+                    temp.add(st);
+                }
             }
-            fileLines = temp.toArray(new String[0]);
+            fileData = Arrays.stream(temp.toArray(new String[0])).map(l -> new CDModel(l)).toArray(CDModel[]::new);
             br.close();
         }
         catch (Exception e){
@@ -78,7 +107,14 @@ public class MainFormData {
         }
         LoadTable();
     }
-
+    public boolean tryParseInt(String value) {
+        try {
+            int temp = Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     public void LoadTable(){
         try{
             String[] varTypes = new String[] {
@@ -92,7 +128,8 @@ public class MainFormData {
                     "String",
                     "boolean"
             };
-            tableDriver = new TableDriver(fileLines, varTypes);
+            tableDriver = new TableDriver(fileData, varTypes);
+            //tableDriver = new TableDriver(fileLines, varTypes);
             tableSorter = new TableRowSorter<>(tableDriver);
         }
         catch (Exception e){

@@ -1,3 +1,5 @@
+import Models.CDModel;
+import Models.ITableObject;
 import Utils.JStyler.JStyler;
 import Utils.TableDriver;
 import net.miginfocom.swing.MigLayout;
@@ -195,7 +197,7 @@ public class MainForm extends JFrame {
 
         btnSaveUpdate = theme.NiceButton("Save / Update");
         btnSaveUpdate.addActionListener(e -> {
-            Data.tableDriver.process(new String[]{
+            String[] fields = {
                     txtID.getText(),
                     txtTitle.getText(),
                     txtAuthor.getText(),
@@ -204,12 +206,15 @@ public class MainForm extends JFrame {
                     txtYPos.getText(),
                     txtBarCode.getText(),
                     txtDescription.getText(),
-                    "no"
-            });
+                    "false"
+            };
+            CDModel data = new CDModel(fields);
+            Data.tableDriver.process(data);
         });
         panel2.add(btnSaveUpdate, "grow");
-
         pnlRoot.add(panel2, "grow");
+
+        Data.displayEntry(1);
     }
 
     void CreatePanel3(){
