@@ -113,7 +113,7 @@ public class JStyler {
         }
     }
 
-    public void LoadDefaultTheme(){
+    public void LoadDefaultTheme() {
         //Path filePath = Paths.get("Utils/JStyler/default_theme.txt");
         //LoadTheme(filePath.toAbsolutePath().toString());
 
